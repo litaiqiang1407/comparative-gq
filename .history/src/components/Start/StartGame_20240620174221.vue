@@ -1,0 +1,22 @@
+<template>
+  <div class="start">
+    <h2 class="title">Game Show Quiz</h2>
+    <h1 class="game-name">COMPARATIVE</h1>
+    <button class="play-button">
+      <font-awesome-icon icon="fa-solid fa-play" />
+      <span>Start Game</span>
+    </button>
+    <div class="description">
+      A multiple choice quiz with time pressure, lifelines and a bonus round
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { fas, far, fal } from "@awesome.me/kit-KIT_CODE/icons";
+</script>
+
+<style lang="scss" scoped>
+@import "./StartGame.scss";
+</style>

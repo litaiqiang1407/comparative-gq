@@ -1,0 +1,21 @@
+.start {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  .container {
+    width: 1020px;
+    height: 540px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+}

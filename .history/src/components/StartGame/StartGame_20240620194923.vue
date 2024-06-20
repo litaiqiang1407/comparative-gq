@@ -1,0 +1,34 @@
+<template>
+  <div class="start">
+    <div class="container">
+      <h2 class="title">Game Show Quiz</h2>
+      <h1 class="game-name">COMPARATIVE</h1>
+      <button class="play-button" @click="onStart()">
+        <font-awesome-icon :icon="['fas', 'play']" />
+        <span class="button-title">Start</span>
+      </button>
+      <div class="description">
+        A multiple choice quiz with time pressure, lifelines and a bonus round
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+export default {
+  components: {
+    FontAwesomeIcon,
+  },
+  methods: {
+    onStart() {
+      this.$emit("onStart");
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+@import "./StartGame.scss";
+</style>

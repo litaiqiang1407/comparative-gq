@@ -1,0 +1,14 @@
+.playing-game {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  .container {
+    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+      url("../../assets/img/quiz-show_orig.jpg") no-repeat center center/cover;
+    width: 1020px;
+    height: 540px;
+    margin: 0 auto;
+  }
+}
