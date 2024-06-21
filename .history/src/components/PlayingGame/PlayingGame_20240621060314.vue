@@ -22,7 +22,7 @@
           </div>
         </div>
         <div class="col-2 score">
-          <span class="score-content">{{ animatedScore }}</span>
+          <span class="score-content">{{ score }}</span>
         </div>
       </div>
 
@@ -78,27 +78,14 @@
       <!-- Footer -->
       <div class="footer">
         <span class="current-question"
-          >{{ currentQuestionIndex + 1 }} of {{ questions.length }}</span
+          >{{ currentQuestionIndex + 1 }} of 10</span
         >
-      </div>
-      <div class="modal" v-if="gameComplete">
-        <div class="modal-content">
-          <h2 class="modal-title">Game Complete</h2>
-          <p class="modal-score">Score</p>
-          <p class="score">{{ score }}</p>
-          <button class="modal-option" @click="showAnswers">
-            Show Answers
-          </button>
-          <button class="modal-option" @click="startAgain">Start Again</button>
-        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import gsap from "gsap";
-
 export default {
   data() {
     return {
@@ -109,7 +96,7 @@ export default {
           image:
             "https://i.pinimg.com/564x/a2/42/8f/a2428f1ba00f56836883485a05f7b889.jpg",
           answers: ["A. big", "B. big than", "C. bigger than", "D. bigger"],
-          correctAnswer: 3,
+          correctAnswer: 2,
         },
         {
           number: 2,
@@ -117,7 +104,7 @@ export default {
           image:
             "https://img.freepik.com/free-vector/rabbit-runs-fast-turtle-runs-slow_1308-2855.jpg",
           answers: ["A. faster", "B. fast", "C. fast than", "D. faster than"],
-          correctAnswer: 4,
+          correctAnswer: 3,
         },
         {
           number: 3,
@@ -125,7 +112,7 @@ export default {
           image:
             "https://www.jaycliffepetsrotherham.co.uk/wp-content/uploads/2019/10/Dog-Cat-on-a-Ledge-X-Small-300x166.jpg",
           answers: ["A. smaller than", "B. small", "C. smaller"],
-          correctAnswer: 1,
+          correctAnswer: 0,
         },
         {
           number: 4,
@@ -133,7 +120,7 @@ export default {
           image:
             "https://qph.cf2.quoracdn.net/main-qimg-5e2f521f0e09accd7c8b5f1a89923359-lq",
           answers: ["A. bigger", "B. bigger than", "C. bigger", "D. big than"],
-          correctAnswer: 2,
+          correctAnswer: 1,
         },
         {
           number: 5,
@@ -146,20 +133,20 @@ export default {
             "C. shorter than",
             "D. short than",
           ],
-          correctAnswer: 3,
+          correctAnswer: 2,
         },
         {
           number: 6,
           text: "The boy is _____________ than grandma",
           image:
-            "https://media.baamboozle.com/uploads/images/39477/1590531350_426013",
+            "phttps://media.baamboozle.com/uploads/images/39477/1590531350_426013",
           answers: [
             "A. young",
             "B. younger than",
             "C. young than",
             "D. younger",
           ],
-          correctAnswer: 4,
+          correctAnswer: 1,
         },
         {
           number: 7,
@@ -172,7 +159,7 @@ export default {
             "C. longer",
             "D. long than",
           ],
-          correctAnswer: 1,
+          correctAnswer: 0,
         },
         {
           number: 8,
@@ -180,7 +167,7 @@ export default {
           image:
             "https://media.baamboozle.com/uploads/images/154022/1624368526_252786_gif-url.gif",
           answers: ["A. hoter", "B. hotter", "C. hotter than"],
-          correctAnswer: 2,
+          correctAnswer: 1,
         },
         {
           number: 9,
@@ -188,7 +175,7 @@ export default {
           image:
             "https://media.baamboozle.com/uploads/images/39477/1590531337_676566",
           answers: ["A. stronger", "B. strong than", "C. stronger than"],
-          correctAnswer: 3,
+          correctAnswer: 2,
         },
         {
           number: 10,
@@ -196,19 +183,16 @@ export default {
           image:
             "https://media.baamboozle.com/uploads/images/154022/1623165632_124281.jpeg",
           answers: ["A. slower than", "B. slower", "C. slow than"],
-          correctAnswer: 1,
+          correctAnswer: 0,
         },
       ],
       currentQuestionIndex: 0,
       remainingTime: 30,
       score: 0,
-      animatedScore: 0,
       progressBarWidth: 100,
       intervalId: null,
       showNotification: true,
-      notificationMessage: "",
-      resultMessage: "",
-      gameComplete: false,
+      notificationMessage: "Question 1 - Get Ready",
     };
   },
   computed: {
@@ -230,32 +214,21 @@ export default {
     },
     selectAnswer(index) {
       clearInterval(this.intervalId);
-      if (index + 1 === this.currentQuestion.correctAnswer) {
-        const oldScore = this.score;
-        const timeBonus = this.remainingTime;
-        const newScore = this.score + 100 + timeBonus;
-        this.score = newScore;
-        this.animateScore(oldScore, newScore);
-        this.showNotificationMessage(
-          `Correct! +100 points, Time Bonus: +${timeBonus} points`
-        );
+      if (index === this.currentQuestion.correctAnswer) {
+        this.score += 10; // Increase score for correct answer
+        this.showNotificationMessage("Correct! +10 points");
       } else {
-        this.showNotificationMessage(
-          `Incorrect! Correct answer: ${
-            this.currentQuestion.answers[this.currentQuestion.correctAnswer - 1]
-          }`
-        );
+        this.showNotificationMessage("Incorrect!");
       }
     },
     nextQuestion() {
       if (this.currentQuestionIndex < this.questions.length - 1) {
         this.currentQuestionIndex++;
         this.showNotificationMessage(
-          `Question ${this.currentQuestionIndex + 1} - Get Ready!!!`
+          `Question ${this.currentQuestionIndex + 1} - Get Ready`
         );
       } else {
         this.showNotificationMessage(`Game Over! Your score: ${this.score}`);
-        this.gameComplete = true;
       }
     },
     showNotificationMessage(message) {
@@ -276,16 +249,6 @@ export default {
         }
       }, 3000);
     },
-    animateScore(oldScore, newScore) {
-      gsap.to(this.$data, {
-        duration: 1,
-        animatedScore: newScore,
-        roundProps: "animatedScore",
-        onUpdate: () => {
-          this.animatedScore = Math.round(this.animatedScore);
-        },
-      });
-    },
     useOption(option) {
       if (option === "x2") {
         // Double the score for this question
@@ -295,25 +258,6 @@ export default {
         // Add extra time to the timer
         this.remainingTime += 10;
       }
-    },
-    startAgain() {
-      (this.currentQuestionIndex = 0),
-        (this.remainingTime = 30),
-        (this.score = 0),
-        (this.animatedScore = 0),
-        (this.progressBarWidth = 100),
-        (this.intervalId = null),
-        (this.showNotification = true),
-        (this.notificationMessage = ""),
-        (this.resultMessage = ""),
-        (this.gameComplete = false),
-        this.startTimer();
-      this.showNotificationMessage(
-        `Question ${this.currentQuestionIndex + 1} - Get Ready`
-      );
-    },
-    showAnswers() {
-      // Implement logic to show answers
     },
   },
   mounted() {

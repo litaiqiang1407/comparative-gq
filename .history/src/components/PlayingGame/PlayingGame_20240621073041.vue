@@ -84,12 +84,10 @@
       <div class="modal" v-if="gameComplete">
         <div class="modal-content">
           <h2 class="modal-title">Game Complete</h2>
-          <p class="modal-score">Score</p>
-          <p class="score">{{ score }}</p>
-          <button class="modal-option" @click="showAnswers">
-            Show Answers
-          </button>
-          <button class="modal-option" @click="startAgain">Start Again</button>
+          <p>Score:</p>
+          <p class="modal-score">{{ score }}</p>
+          <button @click="showAnswers">Show Answers</button>
+          <button @click="startAgain">Start Again</button>
         </div>
       </div>
     </div>
@@ -109,7 +107,7 @@ export default {
           image:
             "https://i.pinimg.com/564x/a2/42/8f/a2428f1ba00f56836883485a05f7b889.jpg",
           answers: ["A. big", "B. big than", "C. bigger than", "D. bigger"],
-          correctAnswer: 3,
+          correctAnswer: 2,
         },
         {
           number: 2,
@@ -117,7 +115,7 @@ export default {
           image:
             "https://img.freepik.com/free-vector/rabbit-runs-fast-turtle-runs-slow_1308-2855.jpg",
           answers: ["A. faster", "B. fast", "C. fast than", "D. faster than"],
-          correctAnswer: 4,
+          correctAnswer: 3,
         },
         {
           number: 3,
@@ -133,7 +131,7 @@ export default {
           image:
             "https://qph.cf2.quoracdn.net/main-qimg-5e2f521f0e09accd7c8b5f1a89923359-lq",
           answers: ["A. bigger", "B. bigger than", "C. bigger", "D. big than"],
-          correctAnswer: 2,
+          correctAnswer: 1,
         },
         {
           number: 5,
@@ -146,7 +144,7 @@ export default {
             "C. shorter than",
             "D. short than",
           ],
-          correctAnswer: 3,
+          correctAnswer: 2,
         },
         {
           number: 6,
@@ -159,7 +157,7 @@ export default {
             "C. young than",
             "D. younger",
           ],
-          correctAnswer: 4,
+          correctAnswer: 1,
         },
         {
           number: 7,
@@ -180,7 +178,7 @@ export default {
           image:
             "https://media.baamboozle.com/uploads/images/154022/1624368526_252786_gif-url.gif",
           answers: ["A. hoter", "B. hotter", "C. hotter than"],
-          correctAnswer: 2,
+          correctAnswer: 1,
         },
         {
           number: 9,
@@ -188,7 +186,7 @@ export default {
           image:
             "https://media.baamboozle.com/uploads/images/39477/1590531337_676566",
           answers: ["A. stronger", "B. strong than", "C. stronger than"],
-          correctAnswer: 3,
+          correctAnswer: 2,
         },
         {
           number: 10,
@@ -230,7 +228,7 @@ export default {
     },
     selectAnswer(index) {
       clearInterval(this.intervalId);
-      if (index + 1 === this.currentQuestion.correctAnswer) {
+      if (index === this.currentQuestion.correctAnswer) {
         const oldScore = this.score;
         const timeBonus = this.remainingTime;
         const newScore = this.score + 100 + timeBonus;
@@ -241,8 +239,8 @@ export default {
         );
       } else {
         this.showNotificationMessage(
-          `Incorrect! Correct answer: ${
-            this.currentQuestion.answers[this.currentQuestion.correctAnswer - 1]
+          `Incorrect! Correct answer is ${
+            this.currentQuestion.answers[this.currentQuestion.correctAnswer]
           }`
         );
       }
@@ -308,9 +306,6 @@ export default {
         (this.resultMessage = ""),
         (this.gameComplete = false),
         this.startTimer();
-      this.showNotificationMessage(
-        `Question ${this.currentQuestionIndex + 1} - Get Ready`
-      );
     },
     showAnswers() {
       // Implement logic to show answers

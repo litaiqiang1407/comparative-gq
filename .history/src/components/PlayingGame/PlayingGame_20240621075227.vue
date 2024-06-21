@@ -241,8 +241,8 @@ export default {
         );
       } else {
         this.showNotificationMessage(
-          `Incorrect! Correct answer: ${
-            this.currentQuestion.answers[this.currentQuestion.correctAnswer - 1]
+          `Incorrect! Correct answer is ${
+            this.currentQuestion.answers[this.currentQuestion.correctAnswer]
           }`
         );
       }
@@ -308,9 +308,6 @@ export default {
         (this.resultMessage = ""),
         (this.gameComplete = false),
         this.startTimer();
-      this.showNotificationMessage(
-        `Question ${this.currentQuestionIndex + 1} - Get Ready`
-      );
     },
     showAnswers() {
       // Implement logic to show answers

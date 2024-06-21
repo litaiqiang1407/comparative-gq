@@ -22,7 +22,7 @@
           </div>
         </div>
         <div class="col-2 score">
-          <span class="score-content">{{ animatedScore }}</span>
+          <span class="score-content">{{ score }}</span>
         </div>
       </div>
 
@@ -78,27 +78,14 @@
       <!-- Footer -->
       <div class="footer">
         <span class="current-question"
-          >{{ currentQuestionIndex + 1 }} of {{ questions.length }}</span
+          >{{ currentQuestionIndex + 1 }} of 10</span
         >
-      </div>
-      <div class="modal" v-if="gameComplete">
-        <div class="modal-content">
-          <h2 class="modal-title">Game Complete</h2>
-          <p class="modal-score">Score</p>
-          <p class="score">{{ score }}</p>
-          <button class="modal-option" @click="showAnswers">
-            Show Answers
-          </button>
-          <button class="modal-option" @click="startAgain">Start Again</button>
-        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import gsap from "gsap";
-
 export default {
   data() {
     return {
@@ -152,7 +139,7 @@ export default {
           number: 6,
           text: "The boy is _____________ than grandma",
           image:
-            "https://media.baamboozle.com/uploads/images/39477/1590531350_426013",
+            "phttps://media.baamboozle.com/uploads/images/39477/1590531350_426013",
           answers: [
             "A. young",
             "B. younger than",
@@ -188,7 +175,7 @@ export default {
           image:
             "https://media.baamboozle.com/uploads/images/39477/1590531337_676566",
           answers: ["A. stronger", "B. strong than", "C. stronger than"],
-          correctAnswer: 3,
+          correctAnswer: 4,
         },
         {
           number: 10,
@@ -202,13 +189,10 @@ export default {
       currentQuestionIndex: 0,
       remainingTime: 30,
       score: 0,
-      animatedScore: 0,
       progressBarWidth: 100,
       intervalId: null,
       showNotification: true,
-      notificationMessage: "",
-      resultMessage: "",
-      gameComplete: false,
+      notificationMessage: "Question 1 - Get Ready",
     };
   },
   computed: {
@@ -223,39 +207,30 @@ export default {
           this.remainingTime--;
           this.progressBarWidth = (this.remainingTime / 30) * 100;
         } else {
-          clearInterval(this.intervalId);
           this.showNotificationMessage("Time's up! Moving to next question...");
+          this.nextQuestion();
         }
       }, 1000);
     },
     selectAnswer(index) {
       clearInterval(this.intervalId);
-      if (index + 1 === this.currentQuestion.correctAnswer) {
-        const oldScore = this.score;
-        const timeBonus = this.remainingTime;
-        const newScore = this.score + 100 + timeBonus;
-        this.score = newScore;
-        this.animateScore(oldScore, newScore);
-        this.showNotificationMessage(
-          `Correct! +100 points, Time Bonus: +${timeBonus} points`
-        );
+      if (index === this.currentQuestion.correctAnswer) {
+        this.score += 10; // Increase score for correct answer
+        this.showNotificationMessage("Correct! +10 points");
       } else {
-        this.showNotificationMessage(
-          `Incorrect! Correct answer: ${
-            this.currentQuestion.answers[this.currentQuestion.correctAnswer - 1]
-          }`
-        );
+        this.showNotificationMessage("Incorrect!");
       }
     },
     nextQuestion() {
       if (this.currentQuestionIndex < this.questions.length - 1) {
         this.currentQuestionIndex++;
+        this.remainingTime = 30;
+        this.progressBarWidth = 100;
         this.showNotificationMessage(
-          `Question ${this.currentQuestionIndex + 1} - Get Ready!!!`
+          `Question ${this.currentQuestionIndex + 1} - Get Ready`
         );
       } else {
         this.showNotificationMessage(`Game Over! Your score: ${this.score}`);
-        this.gameComplete = true;
       }
     },
     showNotificationMessage(message) {
@@ -264,27 +239,14 @@ export default {
       setTimeout(() => {
         this.showNotification = false;
         if (message.startsWith("Question")) {
-          this.remainingTime = 30;
-          this.progressBarWidth = 100;
           this.startTimer();
         } else if (
           message.startsWith("Correct") ||
-          message.startsWith("Incorrect") ||
-          message.startsWith("Time's up")
+          message.startsWith("Incorrect")
         ) {
           this.nextQuestion();
         }
       }, 3000);
-    },
-    animateScore(oldScore, newScore) {
-      gsap.to(this.$data, {
-        duration: 1,
-        animatedScore: newScore,
-        roundProps: "animatedScore",
-        onUpdate: () => {
-          this.animatedScore = Math.round(this.animatedScore);
-        },
-      });
     },
     useOption(option) {
       if (option === "x2") {
@@ -296,31 +258,9 @@ export default {
         this.remainingTime += 10;
       }
     },
-    startAgain() {
-      (this.currentQuestionIndex = 0),
-        (this.remainingTime = 30),
-        (this.score = 0),
-        (this.animatedScore = 0),
-        (this.progressBarWidth = 100),
-        (this.intervalId = null),
-        (this.showNotification = true),
-        (this.notificationMessage = ""),
-        (this.resultMessage = ""),
-        (this.gameComplete = false),
-        this.startTimer();
-      this.showNotificationMessage(
-        `Question ${this.currentQuestionIndex + 1} - Get Ready`
-      );
-    },
-    showAnswers() {
-      // Implement logic to show answers
-    },
-  },
-  mounted() {
-    this.showNotificationMessage(
-      `Question ${this.currentQuestionIndex + 1} - Get Ready`
-    );
-  },
+  }
+}
+
 };
 </script>
 
